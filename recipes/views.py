@@ -9,4 +9,4 @@ def home(request):
 
 
 def recipes(request, id):
-    return render(request, 'recipes/pages/home.html')
+    return render(request, 'recipes/pages/recipe-view.html')
