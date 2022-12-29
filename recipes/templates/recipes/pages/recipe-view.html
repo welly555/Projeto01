@@ -1,8 +1,10 @@
 {% extends 'global/base.html' %}
 
+{% block title %}mude-me |{% endblock title %}
 {% block content %}
     <div class="main-contente main-contente-detail container">
-        {% include 'recipes/partials/recipe.html' %}
-        
+        {% for recipe in recipes %}
+            {% include 'recipes/partials/recipe.html' %}
+        {% endfor %}
     </div>
 {% endblock content %}    
