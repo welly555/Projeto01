@@ -2,7 +2,8 @@
 from django.shortcuts import get_list_or_404, render
 
 from recipes.models import Recipe
-from utils.recipes.factory import make_recipe
+
+# from utils.recipes.factory import make_recipe
 
 # Create your views here.
 
@@ -24,6 +25,8 @@ def category(request, category_id):
     return render(request, 'recipes/pages/category.html', context=context)
 
 
-def recipes(request, id):
-    context = {'recipes': [make_recipe()], 'is_detail_page': True}
+def recipe(request, id):
+    recipe = Recipe.objects.filter(
+        pk=id, is_published=True).order_by('-id').first()
+    context = {'recipe': recipe, 'is_detail_page': True, }
     return render(request, 'recipes/pages/recipe-view.html', context=context)

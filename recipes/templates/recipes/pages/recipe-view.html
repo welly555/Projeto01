@@ -3,8 +3,8 @@
 {% block title %}mude-me |{% endblock title %}
 {% block content %}
     <div class="main-contente main-contente-detail container">
-        {% for recipe in recipes %}
+        {% comment %} {% for recipe in recipes %} {% endcomment %}
             {% include 'recipes/partials/recipe.html' %}
-        {% endfor %}
+        {% comment %} {% endfor %} {% endcomment %}
     </div>
 {% endblock content %}    
