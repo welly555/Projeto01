@@ -23,7 +23,13 @@ class RecipeViewTest(RecipeTestBase):
         response = self.client.get(reverse('recipes:home'))
         self.assertIn('No recipes found', response.content.decode('utf8'))
 
-    def test_recipe_template_loads_recipes(self):
+    def test_recipe_home_template_loads_recipes(self):
+        """Test recipe is_published False """
+        self.make_recipe(is_published=False)
+        response = self.client.get(reverse('recipes:home'))
+        self.assertIn('No recipes found', response.content.decode('utf8'))
+
+    def test_recipe_home_template_not_published(self):
         self.make_recipe()
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
@@ -46,6 +52,13 @@ class RecipeViewTest(RecipeTestBase):
         content = response.content.decode('utf-8')
         self.assertIn(tittle, content)
 
+    def test_recipe_category_template_loads_recipes(self):
+        """Test category is_published False """
+        recipe = self.make_recipe(is_published=False)
+        response = self.client.get(
+            reverse('recipes:category', args=(recipe.category.id,)))
+        self.assertEqual(response.status_code, 404)
+
     def test_recipe_detail_view_function_acept(self):
         view = resolve(reverse('recipes:recipe', kwargs={'id': 1}))
         self.assertIs(view.func, views.recipe)
@@ -63,3 +76,10 @@ class RecipeViewTest(RecipeTestBase):
             reverse('recipes:recipe', kwargs={'id': 1}))
         content = response.content.decode('utf-8')
         self.assertIn(tittle, content)
+
+    def test_recipe_detail_template_loads_recipes(self):
+        """Test detail is_published False """
+        recipe = self.make_recipe(is_published=False)
+        response = self.client.get(
+            reverse('recipes:recipe', args=(recipe.id,)))
+        self.assertEqual(response.status_code, 404)
