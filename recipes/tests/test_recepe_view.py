@@ -38,11 +38,28 @@ class RecipeViewTest(RecipeTestBase):
             reverse('recipes:category', kwargs={'category_id': 100}))
         self.assertEqual(response.status_code, 404)
 
-    def test_recipe_recipe_view_function_acept(self):
+    def test_category_template_loads_recipes(self):
+        tittle = 'the is a category test'
+        self.make_recipe(tittle=tittle)
+
+        response = self.client.get(reverse('recipes:category', args=(1,)))
+        content = response.content.decode('utf-8')
+        self.assertIn(tittle, content)
+
+    def test_recipe_detail_view_function_acept(self):
         view = resolve(reverse('recipes:recipe', kwargs={'id': 1}))
         self.assertIs(view.func, views.recipe)
 
-    def test_recipe_recipe_view_return_404_if_recipe_not_found(self):
+    def test_recipe_detail_view_return_404_if_recipe_not_found(self):
         response = self.client.get(
             reverse('recipes:recipe', kwargs={'id': 100}))
         self.assertEqual(response.status_code, 404)
+
+    def test_detail_template_loads_recipes(self):
+        tittle = 'the is a detail page test - one load recipe'
+        self.make_recipe(tittle=tittle)
+
+        response = self.client.get(
+            reverse('recipes:recipe', kwargs={'id': 1}))
+        content = response.content.decode('utf-8')
+        self.assertIn(tittle, content)
