@@ -32,4 +32,4 @@ def recipe(request, id):
 
 
 def search(request):
-    ...
+    return render(request, 'recipes/pages/search.html')
