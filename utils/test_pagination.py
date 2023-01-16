@@ -13,4 +13,30 @@ class PaginationTest(TestCase):
         self.assertEqual([1, 2, 3, 4], pagination)
 
     def test_first_range_is_static_if_corrent_page(self):
-        ...
+        pagination = make_pagination_range(
+            page_range=list(range(1, 21)),
+            qtd_paginas=4,
+            current_page=1
+        )
+        self.assertEqual([1, 2, 3, 4], pagination)
+
+        pagination = make_pagination_range(
+            page_range=list(range(1, 21)),
+            qtd_paginas=4,
+            current_page=2
+        )
+        self.assertEqual([1, 2, 3, 4], pagination)
+
+        pagination = make_pagination_range(
+            page_range=list(range(1, 21)),
+            qtd_paginas=4,
+            current_page=3
+        )
+        self.assertEqual([2, 3, 4, 5], pagination)
+
+        pagination = make_pagination_range(
+            page_range=list(range(1, 21)),
+            qtd_paginas=4,
+            current_page=4
+        )
+        self.assertEqual([3, 4, 5, 6], pagination)
