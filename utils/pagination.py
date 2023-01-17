@@ -31,5 +31,5 @@ def make_pagination_range(
         'start_range': start_range,
         'stop_range': start_range,
         'first_page_out_of_range': current_page > middle_range,
-        'last_page_out_of_page': stop_range < total_pages,
+        'last_page_out_of_range': stop_range < total_pages,
     }
