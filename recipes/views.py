@@ -1,7 +1,6 @@
 
 import os
 
-from django.contrib import messages
 from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -21,7 +20,6 @@ def home(request):
 
     page_obj, paginator_range = make_pagination(request, recipes, PER_PAGE)
 
-    messages.success(request, 'QUE LEGAL')
     context = {
         'recipes': page_obj,
         'paginator_range': paginator_range}
