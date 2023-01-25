@@ -35,6 +35,7 @@ class RegisterForm(forms.ModelForm):
             'at least 8 characters.'
         )
     )
+
     password_confirmed = forms.CharField(
         required=True,
         widget=forms.PasswordInput(attrs={
@@ -76,3 +77,8 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your password here'
             })
         }
+
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+
+        return data
