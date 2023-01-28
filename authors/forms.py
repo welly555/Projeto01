@@ -1,5 +1,8 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 def add_attr(field, attr_name, attr_new_val):
@@ -9,6 +12,21 @@ def add_attr(field, attr_name, attr_new_val):
 
 def add_placeholder(field, placeholder_val):
     add_attr(field, 'placeholder', placeholder_val)
+
+
+def strong_password(passvord):
+    regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
+
+    if not regex.match(passvord):
+        raise ValidationError(
+            ('the pass word must have at last\n '
+             'one letter;\n '
+             'one uppercase letter;\n '
+             'a number;\n '
+             'and at last 8 characters\n '
+             ),
+            code='invalid'
+        )
 
 
 class RegisterForm(forms.ModelForm):
@@ -33,7 +51,8 @@ class RegisterForm(forms.ModelForm):
             'Password must have at least one uppercase letter, '
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'
-        )
+        ),
+        validators=[strong_password],
     )
 
     password_confirmed = forms.CharField(
@@ -81,4 +100,32 @@ class RegisterForm(forms.ModelForm):
     def clean_password(self):
         data = self.cleaned_data.get('password')
 
+        if 'atenção' in data:
+            raise forms.ValidationError(
+                'não digite %(invalid)s nesse campo',
+                code='invalid',
+                params={'invalid': 'atenção'},
+            )
         return data
+
+    def clean_first_name(self):
+        data = self.cleaned_data.get('first_name')
+
+        if 'atenção' in data:
+            raise ValidationError(
+                'não digite %(invalid)s nesse campo',
+                code='invalid',
+                params={'invalid': 'atenção'},
+            )
+        return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get('password')
+        password_confirmed = cleaned_data.get('password_confirmed')
+
+        if password != password_confirmed:
+            raise ValidationError({
+                'password_confirmed': 'password different'
+            })
