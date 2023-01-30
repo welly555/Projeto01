@@ -33,17 +33,18 @@ class RegisterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        add_placeholder(self.fields['username'], 'You username')
-        add_placeholder(self.fields['email'], 'You e-mail')
+        add_placeholder(self.fields['username'], 'Your username')
+        add_placeholder(self.fields['email'], 'Your e-mail')
         add_placeholder(self.fields['first_name'], 'Ex.: jhon')
         add_placeholder(self.fields['last_name'], 'Ex.: doe')
+        add_placeholder(self.fields['password'], 'Your password')
+        add_placeholder(
+            self.fields['password_confirmed'], 'Repeat your password')
         add_attr(self.fields['username'], 'css', 'a-css-class')
 
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Your password'
-        }),
+        widget=forms.PasswordInput(),
         error_messages={
             'required': 'password must not by empy'
         },
@@ -53,13 +54,13 @@ class RegisterForm(forms.ModelForm):
             'at least 8 characters.'
         ),
         validators=[strong_password],
+        label='Password'
     )
 
     password_confirmed = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Repeat your password'
-        })
+        widget=forms.PasswordInput(),
+        label='Password Confirmed'
     )
 
     class Meta:
@@ -76,7 +77,7 @@ class RegisterForm(forms.ModelForm):
             'last_name': 'Last name',
             'username': 'Username',
             'email': 'E-mail',
-            'password': 'Password'
+
         }
         help_texts = {
             'email': 'the e-mail must be valid'
@@ -86,38 +87,6 @@ class RegisterForm(forms.ModelForm):
                 'required': 'this field must not by empy'
             }
         }
-
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'Type your Firstname here',
-                'class': 'input text-input'
-            }),
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Type your password here'
-            })
-        }
-
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'atenção' in data:
-            raise forms.ValidationError(
-                'não digite %(invalid)s nesse campo',
-                code='invalid',
-                params={'invalid': 'atenção'},
-            )
-        return data
-
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
-
-        if 'atenção' in data:
-            raise ValidationError(
-                'não digite %(invalid)s nesse campo',
-                code='invalid',
-                params={'invalid': 'atenção'},
-            )
-        return data
 
     def clean(self):
         cleaned_data = super().clean()
