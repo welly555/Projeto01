@@ -58,6 +58,19 @@ class RegisterForm(forms.ModelForm):
         label='E-mail',
         help_text='the e-mail must be valid'
     )
+    username = forms.CharField(
+        label='Username',
+        help_text=('Username must have letters, numbers or one of those @.+-_'
+                   'the length should be between 4 and 150 charcters'
+                   ),
+        error_messages={
+            'required': 'this field must not by empy.',
+            'min_length': 'Username must have at least 4 chrcacte.',
+            'max_length': 'Username must have less than 150 characters.'
+        },
+        min_length=4,
+        max_length=150
+    )
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
@@ -91,14 +104,6 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password'
         ]
-        labels = {
-            'username': 'Username',
-        }
-        error_messages = {
-            'username': {
-                'required': 'this field must not by empy'
-            }
-        }
 
     def clean(self):
         cleaned_data = super().clean()
