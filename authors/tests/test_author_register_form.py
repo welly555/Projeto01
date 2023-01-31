@@ -1,7 +1,6 @@
 # from django.test import TestCase
 from unittest import TestCase
 
-from django import setup
 from django.test import TestCase as djangoTesteCase
 from django.urls import reverse
 from parameterized import parameterized
@@ -62,10 +61,16 @@ class AuthorRegisterFormIntegrationTest(djangoTesteCase):
         return super().setUp(*args, **kwargs)
 
     @parameterized.expand([
-        ('username', 'this field must not by empy')
+        ('username', 'this field must not by empy'),
+        ('first_name', 'Write your first name'),
+        ('last_name', 'Write your last name'),
+        ('password', 'Password must not be empty'),
+        ('password_confirmed', 'Please, repeat your password'),
+        ('email', 'E-mail is requirid')
     ])
     def test_field_cannot_be_empty(self, field, msg):
         self.form_data[field] = ''
         url = reverse('authors:create')
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get(field))

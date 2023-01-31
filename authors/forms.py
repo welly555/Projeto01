@@ -42,11 +42,27 @@ class RegisterForm(forms.ModelForm):
             self.fields['password_confirmed'], 'Repeat your password')
         add_attr(self.fields['username'], 'css', 'a-css-class')
 
+    first_name = forms.CharField(
+        error_messages={'required': 'Write your first name'},
+        required=True,
+        label='First name'
+    )
+    last_name = forms.CharField(
+        error_messages={'required': 'Write your last name'},
+        required=True,
+        label='Last name'
+    )
+    email = forms.EmailField(
+        error_messages={'required': 'E-mail is requirid'},
+        required=True,
+        label='E-mail',
+        help_text='the e-mail must be valid'
+    )
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
         error_messages={
-            'required': 'password must not by empy'
+            'required': 'Password must not be empty'
         },
         help_text=(
             'Password must have at least one uppercase letter, '
@@ -60,7 +76,10 @@ class RegisterForm(forms.ModelForm):
     password_confirmed = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
-        label='Password Confirmed'
+        label='Password Confirmed',
+        error_messages={
+            'required': 'Please, repeat your password'
+        }
     )
 
     class Meta:
@@ -73,14 +92,7 @@ class RegisterForm(forms.ModelForm):
             'password'
         ]
         labels = {
-            'first_name': 'First name',
-            'last_name': 'Last name',
             'username': 'Username',
-            'email': 'E-mail',
-
-        }
-        help_texts = {
-            'email': 'the e-mail must be valid'
         }
         error_messages = {
             'username': {
