@@ -14,10 +14,10 @@ def add_placeholder(field, placeholder_val):
     add_attr(field, 'placeholder', placeholder_val)
 
 
-def strong_password(passvord):
+def strong_password(password):
     regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
 
-    if not regex.match(passvord):
+    if not regex.match(password):
         raise ValidationError(
             ('the pass word must have at last\n '
              'one letter;\n '
