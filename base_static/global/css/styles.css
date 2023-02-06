@@ -368,6 +368,20 @@ h6 {
     transition: all 300ms ease-in-out;
     box-shadow: -5px 5px 15px rgba(0, 0, 0, .2);
 }
+
+.plaintext-button{
+    display: inline;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-primary);
+    font-size: 1.6rem;
+}
+
+.inline-form{
+    display: inline;
+    
+}
 /* messages*/
 
 .message-container{
