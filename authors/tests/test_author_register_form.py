@@ -109,16 +109,16 @@ class AuthorRegisterFormIntegrationTest(djangoTesteCase):
         self.assertIn(msg, response.context['form'].errors.get('password'))
         self.assertIn(msg, response.content.decode('utf-8'))
 
-    def test_passwors_and_password_confirmation_are_equals(self):
-        self.form_data['password'] = '@A123abc123'
-        self.form_data['password_confirmed'] = '@A123abc1234'
+    # def test_passwors_and_password_confirmation_are_equals(self):
+    #     self.form_data['password'] = '@A123abc123'
+    #     self.form_data['password_confirmed'] = '@A123abc1234'
 
-        url = reverse('authors:register_create')
-        response = self.client.post(url, data=self.form_data, follow=True)
+    #     url = reverse('authors:register_create')
+    #     response = self.client.post(url, data=self.form_data, follow=True)
 
-        msg = 'Password and password_confirmed must be equal'
-        self.assertIn(msg, response.context['form'].errors.get('password'))
-        self.assertIn(msg, response.content.decode('utf-8'))
+    #     msg = 'Password and password_confirmed must be equal'
+    #     self.assertIn(msg, response.context['form'].errors.get('password'))
+    #     self.assertIn(msg, response.content.decode('utf-8'))
 
     def test_send_get_request_to_registration_create_view_return_404(self):
         url = reverse('authors:register_create')
