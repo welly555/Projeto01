@@ -31,7 +31,7 @@ class RecipeMixin:
         description='Recipe descripton',
         slug='recipe_slug',
         preparation_time=10,
-        preparation_time_unit='minuyos',
+        preparation_time_unit='minutos',
         servings=5,
         servings_unit='porções',
         preparation_steps='recipe preparetion steps',

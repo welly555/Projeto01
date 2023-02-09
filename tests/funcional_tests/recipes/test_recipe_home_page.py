@@ -10,13 +10,13 @@ from .base import RecipeBaseFuncionalTest
 @pytest.mark.funcional_test
 class RecipeHomePageTest(RecipeBaseFuncionalTest):
 
-    # @patch('recipes.view.PER_PAGE', new=2)
+    @patch('recipes.views.PER_PAGE', new=2)
     def test_recipe_home_page_without_recipes_mensages_error(self):
         self.browser.get(self.live_server_url)
         body = self.browser.find_element(By.TAG_NAME, 'body')
         self.assertIn('No recipes found here😥😣', body.text)
 
-    # @patch('recipes.view.PER_PAGE', new=2)
+    @patch('recipes.views.PER_PAGE', new=2)
     def test_recipe_seach_imput_can_find_correct(self):
         recipes = self.make_recipe_bath()
         tittle_needed = 'this is what I need'
@@ -36,3 +36,21 @@ class RecipeHomePageTest(RecipeBaseFuncionalTest):
             self.browser.find_element(By.CLASS_NAME, 'main-contente-list').text
         )
         self.sleep(6)
+
+    @patch('recipes.views.PER_PAGE', new=2)
+    def test_recipe_home_page_pagination(self):
+        self.make_recipe_bath()
+
+        self.browser.get(self.live_server_url)
+
+        page2 = self.browser.find_element(
+            By.XPATH,
+            '//a[@aria-label="Go to page 2"]'
+        )
+        page2.click()
+
+        self.assertEqual(
+            len(self.browser.find_elements(By.CLASS_NAME, 'recipe')),
+            2
+        )
+        self.sleep(10)
