@@ -60,7 +60,8 @@ class RecipeMixin:
     def make_recipe_bath(self, qty=10):
         recipes = []
         for i in range(qty):
-            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            kwargs = {'tittle': f'Recipe title {i}', 'slug': f'r{i}',
+                      'author_data': {'username': f'u{i}'}}
             recipe = self.make_recipe(**kwargs)
             recipes.append(recipe)
         return recipes
