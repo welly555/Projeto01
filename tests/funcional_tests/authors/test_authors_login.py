@@ -52,7 +52,7 @@ class AuthorsLoginTest(AuthorsBaseTest):
 
     def test_credentials_invalid(self):
         string_password = 'pass'
-        user = User.objects.create_user(
+        user = User.objects.create_user(  # noqa: E841
             username='My_user', password=string_password)
 
         self.browser.get(self.live_server_url + reverse('authors:login'))
