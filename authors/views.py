@@ -5,6 +5,8 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
+from recipes.models import Recipe
+
 from .forms import LoginForm, RegisterForm
 
 # Create your views here.
@@ -52,7 +54,7 @@ def login_create(request):
         raise Http404()
 
     form = LoginForm(request.POST)
-    login_url = reverse('authors:login')
+    # login_url = reverse('authors:login')
 
     if form.is_valid():
         authenticated_user = authenticate(
@@ -87,4 +89,14 @@ def logout_view(request):
 
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard(request):
-    return render(request, 'authors/pages/dashboard.html')
+    recipes = Recipe.objects.filter(
+        is_published=False,
+        author=request.user
+    )
+    return render(
+        request,
+        'authors/pages/dashboard.html',
+        {
+            'recipes': recipes,
+        }
+    )
