@@ -5,6 +5,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
+from authors.forms.recipe_form import AuthorRecipeForm
 from recipes.models import Recipe
 
 from .forms import LoginForm, RegisterForm
@@ -107,14 +108,20 @@ def dashboard_recipe_edit(request, id):
     recipe = Recipe.objects.filter(
         is_published=False,
         author=request.user,
-        pk=id
-    )
+        pk=id,
+
+    ).first()
     if not recipe:
         raise Http404()
+
+    form = AuthorRecipeForm(
+        data=request.POST or None,
+        instance=recipe
+    )
     return render(
         request,
         'authors/pages/dashboard_recipe.html',
         context={
-
+            'form': form
         }
     )
