@@ -1,5 +1,6 @@
 import os
 
+from django.db.models import Q
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.views.generic import ListView
 
@@ -73,4 +74,37 @@ class RecipeListViewCategory(RecipeListViewBase):
 
 
 class RecipeListViewSeach(RecipeListViewBase):
-    ...
+    template_name = 'recipes/pages/search.html'
+
+    def get_queryset(self, *args, **kwargs):
+        search_term = self.request.GET.get('q', '')
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(
+            Q(
+                Q(tittle__icontains=search_term) | Q(
+                    description__icontains=search_term),
+            ),
+            is_published=True
+        ).order_by('-id')
+
+        self.name = qs[0].category.name
+
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        search_term = self.request.GET.get('q', '')
+        ctx = super().get_context_data(*args, **kwargs)
+        page_obj, paginator_range = make_pagination(
+            self.request,
+            ctx.get('recipes'),
+            PER_PAGE
+        )
+
+        ctx.update(
+            {
+                'page_tittle': f'Search for "{search_term}" |',
+                'search_term': search_term,
+                'additional_url_query': f'&q={search_term}',
+            }
+        )
+        return ctx
