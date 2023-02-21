@@ -13,7 +13,7 @@ class RecipeHomeViewTest(RecipeTestBase):
 
     def test_recipe_home_view_function_acept(self):
         view = resolve(reverse('recipes:home'))
-        self.assertIs(view.func, views.home)
+        self.assertIs(view.func.view_class, views.RecipeListViewHome)
 
     def test_recipe_home_view_return_status_200_ok(self):
         response = self.client.get(reverse('recipes:home'))
@@ -42,8 +42,8 @@ class RecipeHomeViewTest(RecipeTestBase):
             recipes = response.context['recipes']
             paginator = recipes.paginator
 
-            self.assertEqual(paginator.num_pages, 4)
-            self.assertEqual(len(paginator.get_page(1)), 5)
+            self.assertEqual(paginator.num_pages, 3)
+            self.assertEqual(len(paginator.get_page(1)), 6)
 
     def test_invalid_page_query_uses_page_one(self):
         self.make_recipe_bath(qty=8)

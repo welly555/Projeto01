@@ -37,7 +37,7 @@ class RecipeHomePageTest(RecipeBaseFuncionalTest):
         )
         self.sleep(6)
 
-    @patch('recipes.views.PER_PAGE', new=2)
+    @patch('recipes.views.PER_PAGE', new=4)
     def test_recipe_home_page_pagination(self):
         self.make_recipe_bath()
 
@@ -51,6 +51,6 @@ class RecipeHomePageTest(RecipeBaseFuncionalTest):
 
         self.assertEqual(
             len(self.browser.find_elements(By.CLASS_NAME, 'recipe')),
-            2
+            4
         )
         self.sleep(10)

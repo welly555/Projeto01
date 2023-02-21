@@ -1,7 +1,8 @@
 import os
 
 from django.db.models import Q
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.http import Http404
+from django.shortcuts import get_list_or_404
 from django.views.generic import ListView
 
 from recipes.models import Recipe
@@ -77,7 +78,9 @@ class RecipeListViewSeach(RecipeListViewBase):
     template_name = 'recipes/pages/search.html'
 
     def get_queryset(self, *args, **kwargs):
-        search_term = self.request.GET.get('q', '')
+        search_term = self.request.GET.get('q', '').strip()
+        if not search_term:
+            raise Http404()
         qs = super().get_queryset(*args, **kwargs)
         qs = qs.filter(
             Q(
@@ -87,18 +90,13 @@ class RecipeListViewSeach(RecipeListViewBase):
             is_published=True
         ).order_by('-id')
 
-        self.name = qs[0].category.name
-
         return qs
 
     def get_context_data(self, *args, **kwargs):
-        search_term = self.request.GET.get('q', '')
+        search_term = self.request.GET.get('q', '').strip()
+        if not search_term:
+            raise Http404()
         ctx = super().get_context_data(*args, **kwargs)
-        page_obj, paginator_range = make_pagination(
-            self.request,
-            ctx.get('recipes'),
-            PER_PAGE
-        )
 
         ctx.update(
             {
